@@ -12,18 +12,23 @@ if [[ ! -f $ANTIGEN_ZSH ]]; then
   mkdir -p $ANTIGEN_DIR
   curl -fsSL https://git.io/antigen > $ANTIGEN_ZSH
 fi
-source $ANTIGEN_ZSH
 
-# ──────────────────────────────────────────────────────────────
-# 3) Load Oh My Zsh core via Antigen
-antigen use oh-my-zsh
 
-# 4) Keep your existing OMZ update settings
-zstyle ':omz:update' mode auto
-zstyle ':omz:update' frequency 13
+
 
 
 if [[ -z $ANTIGEN_APPLIED ]]; then
+
+  # ──────────────────────────────────────────────────────────────
+  # 3) Load Oh My Zsh core via Antigen
+  source $ANTIGEN_ZSH
+  antigen use oh-my-zsh
+
+  # ────────────────────────────────────────────────────────────
+  # 4) Keep your existing OMZ update settings
+  zstyle ':omz:update' mode auto
+  zstyle ':omz:update' frequency 13
+
   # ──────────────────────────────────────────────────────────────
   # 5) Plugins (Antigen will clone/pull them into ~/.config/antigen/repos)
   antigen bundle git
