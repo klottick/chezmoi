@@ -16,7 +16,7 @@ source $ANTIGEN_ZSH
 
 # ──────────────────────────────────────────────────────────────
 # 3) Load Oh My Zsh core via Antigen
-antigen bundle robbyrussell/oh-my-zsh
+antigen init robbyrussell/oh-my-zsh
 
 # 4) Keep your existing OMZ update settings
 zstyle ':omz:update' mode auto
@@ -37,7 +37,10 @@ antigen bundle history
 antigen theme romkatv/powerlevel10k
 
 # 7) Activate bundles & theme
-antigen apply
+if [[ -z $ANTIGEN_APPLIED ]]; then
+  antigen apply
+  export ANTIGEN_APPLIED=1
+fi
 
 # 8) Source your personal p10k config
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
