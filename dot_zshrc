@@ -44,6 +44,8 @@ antigen apply
 
 # ──────────────────────────────────────────────────────────────
 # 9) Your existing exports and aliases
+export EDITOR="code --wait"
+export VISUAL="$EDITOR"
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.local/share/pypoetry/venv/bin/poetry:$PATH"
 export NVM_DIR="$HOME/.nvm"
