@@ -1,4 +1,22 @@
 {{- $email := promptStringOnce . "email" "Email address" -}}
 
+[chezmoi]
+
+# If you edit a managed file outside of chezmoi, error out instead of silently overwriting
+panicOnExternalModifications = true
+
+# ──────────────────────────────────────────────────────────────
+# Git integration
+[git]
+
+# After you add or edit via `chezmoi add` / `chezmoi edit`, commit automatically
+autoCommit = true
+
+# After auto‑commit, push straight to origin
+autoPush = true
+
+# Customize the commit message for those auto-commits
+commitMessage = "chezmoi: apply local changes by {{ $email }}"
+
 [data]
     email = {{ $email | quote }}
