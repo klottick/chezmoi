@@ -17,34 +17,31 @@ fi
 
 
 
-if [[ -z $ANTIGEN_APPLIED ]]; then
 
-  # ──────────────────────────────────────────────────────────────
-  # 3) Load Oh My Zsh core via Antigen
-  source $ANTIGEN_ZSH
-  antigen use oh-my-zsh
+# ──────────────────────────────────────────────────────────────
+# 3) Load Oh My Zsh core via Antigen
+source $ANTIGEN_ZSH
+antigen use oh-my-zsh
 
-  # ────────────────────────────────────────────────────────────
-  # 4) Keep your existing OMZ update settings
-  zstyle ':omz:update' mode auto
-  zstyle ':omz:update' frequency 13
+# ────────────────────────────────────────────────────────────
+# 4) Keep your existing OMZ update settings
+zstyle ':omz:update' mode auto
+zstyle ':omz:update' frequency 13
 
-  # ──────────────────────────────────────────────────────────────
-  # 5) Plugins (Antigen will clone/pull them into ~/.config/antigen/repos)
-  antigen bundle git
-  antigen bundle zsh-users/zsh-autosuggestions
-  antigen bundle zsh-users/zsh-syntax-highlighting
-  antigen bundle you-should-use
-  antigen bundle fdellwing/zsh-bat
-  antigen bundle dirhistory
-  antigen bundle history
-  # ──────────────────────────────────────────────────────────────
-  # 6) Powerlevel10k theme via Antigen
-  antigen theme romkatv/powerlevel10k
-  # 7) Activate bundles & theme
-  antigen apply
-  export ANTIGEN_APPLIED=1
-fi
+# ──────────────────────────────────────────────────────────────
+# 5) Plugins (Antigen will clone/pull them into ~/.config/antigen/repos)
+antigen bundle git
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle you-should-use
+antigen bundle fdellwing/zsh-bat
+antigen bundle dirhistory
+antigen bundle history
+# ──────────────────────────────────────────────────────────────
+# 6) Powerlevel10k theme via Antigen
+antigen theme romkatv/powerlevel10k
+# 7) Activate bundles & theme
+antigen apply
 
 # 8) Source your personal p10k config
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
