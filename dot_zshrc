@@ -13,6 +13,7 @@ if [[ ! -f $ANTIGEN_ZSH ]]; then
   curl -fsSL https://git.io/antigen > $ANTIGEN_ZSH
 fi
 
+alias ctl='poetry run controllerctl'
 
 # ──────────────────────────────────────────────────────────────
 # 3) Load Oh My Zsh core via Antigen
@@ -52,5 +53,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ]       && source "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
 
-alias ctl='poetry run controllerctl'
+
 export PATH="$PATH:/home/klottick/.local/bin"
