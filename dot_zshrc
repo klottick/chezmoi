@@ -30,7 +30,7 @@ zstyle ':omz:update' frequency 13
 antigen bundle git
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle you-should-use
+antigen bundle MichaelAquilina/zsh-you-should-use
 antigen bundle fdellwing/zsh-bat
 antigen bundle dirhistory
 antigen bundle history
