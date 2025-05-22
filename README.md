@@ -13,9 +13,3 @@ cat ~/.ssh/id_github.pub
 # 4. Apply dotfiles
 chezmoi apply
 ```
-```
-sh -c "$(curl -fsLS get.chezmoi.io)" -- -b ~/.local/bin
-chezmoi init --apply git@github.com:klottick/chezmoi.git
-chsh -s "$(which zsh)"
-exec zsh
-```
