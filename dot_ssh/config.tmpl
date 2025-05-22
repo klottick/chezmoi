@@ -1,9 +1,6 @@
 Host github.com
-    HostName ssh.github.com
-    Port 443
-
-Host github-chezmoi
-  HostName github.com
+  HostName ssh.github.com
   User git
-  IdentityFile ~/.ssh/id_chezmoi
+  IdentityFile ~/.ssh/id_github
   IdentitiesOnly yes
+  Port 443
