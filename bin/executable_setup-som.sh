@@ -39,6 +39,7 @@ if [ "$SETUP_STAGE" -eq 0 ]; then
 
   echo "Allowing root login..."
   sed -i '1s/.*/PermitRootLogin yes/' /etc/ssh/sshd_config.d/sshd_config.conf
+  ckp-allow-root-ssh
   systemctl restart ssh
 
   echo "Setting up VPN..."
