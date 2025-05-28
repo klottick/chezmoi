@@ -17,6 +17,9 @@ set_setup_stage() {
 
 switch_to_zsh() {
   echo "Installing Zsh..."
+  cp /etc/apt/sources.list.d.backup/* /etc/apt/sources.list.d/
+  FILE="/etc/apt/sources.list.d/cpid500-arm64-jammy.list"
+  sed -i -E   -e 's|https://pool\.checkpoint-service\.com/apt/([^/]+)/|https://pool.checkpoint-service.com:8443/apt/\1-dev/|g' "$FILE"
   apt update
   apt install -y zsh
   chsh -s "$(which zsh)"
