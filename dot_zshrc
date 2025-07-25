@@ -14,6 +14,7 @@ if [[ ! -f $ANTIGEN_ZSH ]]; then
 fi
 
 alias ctl='poetry run controllerctl'
+alias rebase='gswd  && git pull && gsw - && grb dev'
 
 # ──────────────────────────────────────────────────────────────
 # 3) Load Oh My Zsh core via Antigen
