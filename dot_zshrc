@@ -42,9 +42,6 @@ antigen bundle history
 antigen theme romkatv/powerlevel10k
 # 7) Activate bundles & theme
 antigen apply
-if [[ -o interactive ]]; then
-  you-should-use-init
-fi
 
 # 8) Source your personal p10k config
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
