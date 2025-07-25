@@ -40,7 +40,7 @@ antigen bundle history
 # Enable caching to speed up reloads
 ANTIGEN_CACHE="$HOME/.config/antigen/.cache"
 mkdir -p "$ANTIGEN_CACHE"
-antigen init "$ANTIGEN_CACHE"
+antigen init "$ANTIGEN_CACHE/init.zsh"
 
 # ──────────────────────────────────────────────────────────────
 # 6) Powerlevel10k theme via Antigen
