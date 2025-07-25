@@ -36,11 +36,6 @@ antigen bundle fdellwing/zsh-bat
 antigen bundle dirhistory
 antigen bundle history
 
-# Enable antigen caching
-
-ANTIGEN_CACHE="$HOME/.config/antigen/.cache"
-mkdir -p "$ANTIGEN_CACHE"
-antigen init "$ANTIGEN_CACHE"
 
 # ──────────────────────────────────────────────────────────────
 # 6) Powerlevel10k theme via Antigen
