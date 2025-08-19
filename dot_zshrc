@@ -4,6 +4,13 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt APPEND_HISTORY INC_APPEND_HISTORY SHARE_HISTORY \
+       HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE EXTENDED_HISTORY
+
+
 # ──────────────────────────────────────────────────────────────
 # 2) Bootstrap Antigen (download only if missing)
 ANTIGEN_DIR="$HOME/.config/antigen"
