@@ -50,7 +50,7 @@ if [ "$SETUP_STAGE" -eq 0 ]; then
   echo "Installing system packages..."
   apt update
   apt install -y vim python3-dev python3-venv cmake python3-pybind11 \
-      libmosquitto-dev fakeroot build-essential unzip git
+      libmosquitto-dev fakeroot build-essential unzip git gcc
 
   echo "Installing UV (pipx replacement)..."
   curl -LsSf https://github.com/astral-sh/uv/releases/latest/download/uv-installer.sh | sh
