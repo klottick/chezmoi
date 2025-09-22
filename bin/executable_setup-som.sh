@@ -58,7 +58,7 @@ if [ "$SETUP_STAGE" -eq 0 ]; then
 
   echo "Installing global Python tools with UV..."
   uv venv
-  uv pip install --system cruft poetry pre-commit
+  uv pip install --system cruft pre-commit
 
   echo "Installing Oh My Zsh..."
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -72,13 +72,6 @@ elif [ "$SETUP_STAGE" -eq 1 ]; then
   if [ ! -d "$ZSH_CUSTOM/themes/powerlevel10k" ]; then
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"
   fi
-  sed -i 's/ZSH_THEME=".*"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
-
-  echo "Adding Zsh plugins..."
-  sed -i 's/^plugins=(.*)/plugins=(evalcache poetry git git-extras debian tmux screen history extract colorize web-search docker)/' ~/.zshrc
-
-  echo "Restoring previous Zsh setup (if present)..."
-  [ -f "/root/zsh-setup.tar.gz" ] && tar -xzf /root/zsh-setup.tar.gz -C ~
 
   echo "Installing Node.js via NVM..."
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
@@ -86,8 +79,6 @@ elif [ "$SETUP_STAGE" -eq 1 ]; then
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
   nvm install 20
 
-  echo "Configuring Poetry..."
-  poetry config virtualenvs.in-project true
 
   set_setup_stage 2
   exec "$SHELL" -l -c "bash $0"
@@ -108,7 +99,7 @@ elif [ "$SETUP_STAGE" -eq 2 ]; then
     if [[ ! -d "$repo_dir" ]]; then
       git clone "$repo_url"
       cd "$repo_dir" || continue
-      poetry install
+      uv sync
       pre-commit install-hooks
       [[ "$repo_dir" == "cpid_500_rfid_driver" ]] && npm install
       cd ..
