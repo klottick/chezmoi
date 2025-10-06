@@ -178,7 +178,8 @@ if [[ "$SETUP_STAGE" -eq 0 ]]; then
   log "Installing system packages…"
   apt-get install -y \
     vim python3-dev python3-venv cmake python3-pybind11 \
-    libmosquitto-dev fakeroot build-essential unzip git gcc curl ca-certificates
+    libmosquitto-dev fakeroot build-essential unzip git gcc curl ca-certificates \
+    ckp-python3.13 ckp-python3.13-extras ckp-python3.13-headers
 
   log "Installing uv (Python toolchain)…"
   curl -LsSf https://github.com/astral-sh/uv/releases/latest/download/uv-installer.sh | sh
