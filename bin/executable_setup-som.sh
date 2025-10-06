@@ -235,7 +235,7 @@ elif [[ "$SETUP_STAGE" -eq 2 ]]; then
   cd /root/repos
 
   declare -A REPOS=(
-    ["cpid_500_rfid_driver"]="checkpt/cpid-500-ui"
+    ["cpid-500-ui"]="checkpt/cpid-500-ui"
     ["cpid-500-rfid-controller"]="checkpt/cpid-500-rfid-controller"
     ["gpio-controller"]="checkpt/gpio-controller"
   )
@@ -258,7 +258,7 @@ elif [[ "$SETUP_STAGE" -eq 2 ]]; then
       fi
 
       # Node deps only for the driver repo (per your original)
-      if [[ "$repo_dir" == "cpid_500_rfid_driver" && -f package.json ]]; then
+      if [[ "$repo_dir" == "cpid-500-ui" && -f package.json ]]; then
         npm install || warn "npm install failed in $repo_dir"
       fi
 
