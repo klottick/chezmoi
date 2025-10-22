@@ -20,7 +20,7 @@ if [[ ! -f $ANTIGEN_ZSH ]]; then
   curl -fsSL https://git.io/antigen > $ANTIGEN_ZSH
 fi
 
-alias ctl='poetry run controllerctl'
+alias ctl='uv run controllerctl'
 alias rebase='gswd  && git pull && gsw - && grb dev'
 
 # ──────────────────────────────────────────────────────────────
