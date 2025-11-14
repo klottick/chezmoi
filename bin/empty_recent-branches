@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Show most recently committed-to local branches.
+# Usage: recent-branches [COUNT]
+# Default COUNT = 5
+
+set -euo pipefail
+
+COUNT="${1:-5}"
+
+git for-each-ref \
+  --sort=-committerdate refs/heads/ \
+  --format='%(committerdate:short) %(refname:short)' |
+  head -n "$COUNT"
