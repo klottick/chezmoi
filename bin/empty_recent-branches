@@ -8,6 +8,12 @@ set -euo pipefail
 
 COUNT="${1:-5}"
 
+# Ensure we're inside a git repo
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "Error: not inside a git repository." >&2
+    exit 1
+fi
+
 git for-each-ref \
   --sort=-committerdate refs/heads/ \
   --format='%(committerdate:short) %(refname:short)' |
