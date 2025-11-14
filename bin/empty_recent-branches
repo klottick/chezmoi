@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Show most recently committed-to local branches.
 # Usage: recent-branches [COUNT]
