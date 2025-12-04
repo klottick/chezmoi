@@ -74,6 +74,34 @@ switch_to_zsh() {
   exec zsh -lc "zsh $0 --zsh"
 }
 
+allow_wan_ssh() {
+  ZONE_FILE="/etc/firewalld/zones/public.xml"
+  
+  # Sanity check
+  if [[ ! -f "$ZONE_FILE" ]]; then
+      log "Error: $ZONE_FILE does not exist." >&2
+      exit 1
+  fi
+  
+  # If already present, nothing to do
+  if grep -q '<service name="ssh"' "$ZONE_FILE"; then
+      log "SSH service already present in public zone."
+      exit 0
+  fi
+  
+  # Insert before the closing </zone> tag
+  # Keeps indentation sane
+  sed -i '/<\/zone>/i \  <service name="ssh"/>' "$ZONE_FILE"
+  
+  log "Added <service name=\"ssh\"/> to $ZONE_FILE"
+  
+  # Reload firewalld so it sees the change
+  if systemctl is-active --quiet firewalld; then
+      firewall-cmd --reload
+      echo "firewalld reloaded."
+  fi
+}
+
 # ========================
 # Run
 # ========================
@@ -93,9 +121,13 @@ if [[ "$SETUP_STAGE" -eq 0 ]]; then
   log "Removing Google Authenticator config…"
   rm -f /root/.google_authenticator
 
+  log "Setting up wan ssh"
+  allow_wan_ssh
+
   log "Allowing root SSH login + enabling global PubkeyAuthentication…"
   mkdir -p /etc/ssh/sshd_config.d
   CONF="/etc/ssh/sshd_config.d/sshd_config.conf"
+
 
   # Ensure file exists
   [[ -f "$CONF" ]] || : > "$CONF"
