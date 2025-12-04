@@ -130,6 +130,135 @@ add_firewalld_ssh_service() {
 
     return 0
 }
+
+set_eth0_static_ip() {
+    local conn_file="/etc/NetworkManager/system-connections/eth0.nmconnection"
+    local prefix="172.201.207"
+    local cidr="16"
+    local gateway="172.201.5.1"
+    local dns="172.201.10.10"
+    local ip=""
+    local tmp_file
+    local changed=0
+
+    if [[ ! -f "$conn_file" ]]; then
+        log "Error: $conn_file does not exist."
+        return 1
+    fi
+
+    # Extract current IPv4 method
+    local current_method
+    current_method="$(
+        awk '
+            BEGIN { in_ipv4 = 0 }
+            /^\[ipv4\]/ { in_ipv4 = 1; next }
+            /^\[/ && in_ipv4 { in_ipv4 = 0 }
+            in_ipv4 && /^method=/ {
+                sub(/^method=/, "", $0);
+                print $0;
+                exit;
+            }
+        ' "$conn_file"
+    )"
+
+    # Extract current IPv4 address (if method is manual)
+    local current_ip=""
+    if [[ "$current_method" == "manual" ]]; then
+        current_ip="$(
+            awk '
+                BEGIN { in_ipv4 = 0 }
+                /^\[ipv4\]/ { in_ipv4 = 1; next }
+                /^\[/ && in_ipv4 { in_ipv4 = 0 }
+                in_ipv4 && /^address1=/ {
+                    sub(/^address1=/, "", $0);
+                    split($0, a, "/");
+                    print a[1];
+                    exit;
+                }
+            ' "$conn_file"
+        )"
+    fi
+
+    # Already configured with correct prefix → idempotent skip
+    if [[ "$current_method" == "manual" && "$current_ip" == ${prefix}.* ]]; then
+        log "Static IP already configured as $current_ip; skipping."
+        return 0
+    fi
+
+    # Manual but different network → do not override
+    if [[ "$current_method" == "manual" && -n "$current_ip" && "$current_ip" != ${prefix}.* ]]; then
+        log "IPv4 already manual with IP $current_ip (not ${prefix}.x); leaving unchanged."
+        return 0
+    fi
+
+    # Find lowest available IP in range
+    for host in $(seq 1 254); do
+        local candidate="${prefix}.${host}"
+        if ! ping -c1 -W1 "$candidate" >/dev/null 2>&1; then
+            ip="$candidate"
+            break
+        fi
+    done
+
+    if [[ -z "$ip" ]]; then
+        log "Error: no free IP available in ${prefix}.1–${prefix}.254"
+        return 1
+    fi
+
+    log "Configuring static IP: $ip"
+
+    # Rewrite IPv4 block
+    tmp_file="$(mktemp)"
+
+    awk -v ip="$ip" -v gw="$gateway" -v dns="$dns" -v cidr="$cidr" '
+        BEGIN { in_ipv4 = 0 }
+        {
+            if ($0 ~ /^\[ipv4\]/) {
+                print "[ipv4]"
+                print "address1=" ip "/" cidr "," gw
+                print "dns=" dns ";"
+                print "method=manual"
+                in_ipv4 = 1
+                next
+            }
+
+            if (in_ipv4 && $0 ~ /^\[/) {
+                in_ipv4 = 0
+            }
+
+            if (in_ipv4) {
+                next
+            }
+
+            print
+        }
+    ' "$conn_file" > "$tmp_file"
+
+    mv "$tmp_file" "$conn_file"
+    changed=1
+
+    # Clean empty dns-search lines
+    sed -i '/^dns-search=/d' "$conn_file"
+
+    # Update timestamp only if changed
+    if [[ $changed -eq 1 ]]; then
+        sed -i -E "s/^timestamp=[0-9]+/timestamp=$(date +%s)/" "$conn_file"
+        log "Updated NetworkManager timestamp."
+    fi
+
+    chmod 600 "$conn_file"
+
+    # Reload via nmcli if available
+    if command -v nmcli >/dev/null 2>&1; then
+        nmcli connection reload || true
+        nmcli connection down id "eth0" >/dev/null 2>&1 || true
+        nmcli connection up id "eth0" || true
+        log "Reloaded eth0 via nmcli."
+    fi
+
+    return 0
+}
+
 # ========================
 # Run
 # ========================
@@ -153,6 +282,9 @@ if [[ "$SETUP_STAGE" -eq 0 ]]; then
   allow_wan_ssh
 
   log "Allowing wan ssh"
+  add_firewalld_ssh_service
+
+  log "setup static ip"
   add_firewalld_ssh_service
 
   log "Allowing root SSH login + enabling global PubkeyAuthentication…"
