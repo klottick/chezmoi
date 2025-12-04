@@ -80,13 +80,13 @@ allow_wan_ssh() {
   # Sanity check
   if [[ ! -f "$ZONE_FILE" ]]; then
       log "Error: $ZONE_FILE does not exist." >&2
-      exit 1
+      return 1
   fi
   
   # If already present, nothing to do
   if grep -q '<service name="ssh"' "$ZONE_FILE"; then
       log "SSH service already present in public zone."
-      exit 0
+      return 0
   fi
   
   # Insert before the closing </zone> tag
