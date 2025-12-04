@@ -102,6 +102,34 @@ allow_wan_ssh() {
   fi
 }
 
+add_firewalld_ssh_service() {
+    local zone_file="/etc/firewalld/zones/public.xml"
+
+    # Ensure file exists
+    if [[ ! -f "$zone_file" ]]; then
+        log "Error: $zone_file does not exist." >&2
+        return 1
+    fi
+
+    # Skip if already present
+    if grep -q '<service name="ssh"' "$zone_file"; then
+        log "SSH service already present in public zone."
+        return 0
+    fi
+
+    # Insert before </zone>
+    sed -i '/<\/zone>/i \  <service name="ssh"/>' "$zone_file"
+
+    log "Added <service name=\"ssh\"/> to $zone_file"
+
+    # Reload firewalld if running
+    if systemctl is-active --quiet firewalld; then
+        firewall-cmd --reload
+        echo "firewalld reloaded."
+    fi
+
+    return 0
+}
 # ========================
 # Run
 # ========================
@@ -123,6 +151,9 @@ if [[ "$SETUP_STAGE" -eq 0 ]]; then
 
   log "Setting up wan ssh"
   allow_wan_ssh
+
+  log "Allowing wan ssh"
+  add_firewalld_ssh_service
 
   log "Allowing root SSH login + enabling global PubkeyAuthentication…"
   mkdir -p /etc/ssh/sshd_config.d
