@@ -285,7 +285,7 @@ if [[ "$SETUP_STAGE" -eq 0 ]]; then
   add_firewalld_ssh_service
 
   log "setup static ip"
-  add_firewalld_ssh_service
+  set_eth0_static_ip
 
   log "Allowing root SSH login + enabling global PubkeyAuthentication…"
   mkdir -p /etc/ssh/sshd_config.d
