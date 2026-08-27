@@ -1,3 +1,10 @@
 .oh-my-zsh/
 .config/antigen/
 ~/.ssh/id_chezmoi
+.config/opencode/.env
+.config/opencode/node_modules/
+.config/opencode/package.json
+.config/opencode/package-lock.json
+.config/opencode/bun.lock
+.opencode/
+docs/
